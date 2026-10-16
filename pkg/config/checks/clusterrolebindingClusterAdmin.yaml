@@ -19,6 +19,7 @@ schemaString: |
                 - const: "cluster-admin"
                 - pattern: '^system:'
                 - const: "gce:podsecuritypolicy:calico-sa"
+                - const: "kubeadm:cluster-admins"
     - required: ["roleRef"]
       properties:
         roleRef:
@@ -38,7 +39,7 @@ schemaString: |
 additionalSchemaStrings:
   rbac.authorization.k8s.io/ClusterRole: |
     {{ if (ne .roleRef.name "view") }}
-    {{ if and (ne .metadata.name "cluster-admin") (not (hasPrefix .metadata.name "system:")) (ne .metadata.name "gce:podsecuritypolicy:calico-sa") }}
+    {{ if and (ne .metadata.name "cluster-admin") (not (hasPrefix .metadata.name "system:")) (ne .metadata.name "gce:podsecuritypolicy:calico-sa") (ne .metadata.name "kubeadm:cluster-admins") }}
     # Do not alert on default ClusterRoleBindings.
     type: object
     required: ["metadata", "rules"]
